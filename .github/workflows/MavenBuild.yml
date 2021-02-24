@@ -24,7 +24,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+
+      - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
@@ -36,6 +37,17 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
+      # Setup settings.xml for local agent usage
+      - name: Settings.xml Setup
+        uses: s4u/maven-settings-action@v2.3.0
+        with:
+          servers: |
+            [{
+              "id": "Exchange2",
+              "username": "dlnmdev",
+              "password": "${{ secrets.MAVEN_SERVER_PASS }}"
+            }]
 
       # Initiate Maven Build
       - name: Build with Maven
