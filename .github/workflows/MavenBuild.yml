@@ -56,4 +56,4 @@ jobs:
 
       # Initiate Maven Build
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
+        run: mvn verify "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
