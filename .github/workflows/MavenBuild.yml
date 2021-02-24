@@ -22,13 +22,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/labeler@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      # Setup JAVA
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
@@ -60,6 +57,6 @@ jobs:
 
       # Publish Maven Package
       - name: Publish Maven Package
-        run: mvn --batch-mode clean package deploy "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
+        run: mvn --batch-mode deploy "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
