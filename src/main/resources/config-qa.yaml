@@ -1,0 +1,5 @@
+api:
+  version: 'v1'
+  autodiscovery: '0'
+
+http.listener.port: '8081'
