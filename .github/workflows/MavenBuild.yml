@@ -24,12 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Setup JAVA
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
+      - uses: actions/setup-java@v1
 
       # Cache Maven Dependencies
       - name: Cache Maven packages
@@ -39,8 +34,12 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Publish Maven Package
-      - name: Publish Maven Package
-        run: mvn --batch-mode deploy "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Build Maven
+      - name: Build Maven
+        run: mvn --batch-mode verify "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
+
+      - name: mkdir staging && cp target/*.jar staging
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Package
+          path: staging
