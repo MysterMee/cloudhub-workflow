@@ -39,22 +39,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Setup settings.xml for local agent usage
-      - name: Settings.xml Setup
-        uses: s4u/maven-settings-action@v2.3.0
-        with:
-          override: true
-          servers: |
-            [{
-              "id": "Exchange2",
-              "username": "dlnmdev",
-              "password": "${{ secrets.MAVEN_SERVER_PASS }}"
-            },{
-              "id": "MuleRepository",
-              "username": "dlnmdev",
-              "password": "${{ secrets.MAVEN_SERVER_PASS }}"
-            }]
-
       # Publish Maven Package
       - name: Publish Maven Package
         run: mvn --batch-mode deploy "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
