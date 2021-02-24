@@ -96,6 +96,13 @@
       </dependency>
       -->
    </dependencies>
+   <distributionManagement>
+      <repository>
+        <id>github</id>
+        <name>GitHub OWNER Apache Maven Packages</name>
+        <url>https://maven.pkg.github.com/MysterMee/mule-pipeline-action</url>
+      </repository>
+   </distributionManagement>
    <repositories>
       <repository>
          <id>anypoint-exchange-v2</id>
