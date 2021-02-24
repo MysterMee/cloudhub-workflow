@@ -58,6 +58,8 @@ jobs:
               "password": "${{ secrets.MAVEN_SERVER_PASS }}"
             }]
 
-      # Initiate Maven Build
-      - name: Build with Maven
-        run: mvn deploy "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
+      # Publish Maven Package
+      - name: Publish Maven Package
+        run: mvn --batch-mode clean package deploy "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
