@@ -42,6 +42,7 @@ jobs:
       - name: Settings.xml Setup
         uses: s4u/maven-settings-action@v2.3.0
         with:
+          override: true
           servers: |
             [{
               "id": "Exchange2",

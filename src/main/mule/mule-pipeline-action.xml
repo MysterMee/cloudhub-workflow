@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
-xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 xmlns="http://www.mulesoft.org/schema/mule/core"
 xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
 xmlns:http="http://www.mulesoft.org/schema/mule/http"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
-http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd">
 	<flow name="mule-pipeline-action-main">
         <http:listener config-ref="mule-pipeline-action-httpListenerConfig" path="/${api.version}/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -20,7 +18,6 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
             </http:error-response>
         </http:listener>
         <set-variable value="#[attributes.headers.'X-Correlation-Id' default uuid()]" doc:name="X-Correlation-Id" doc:id="cc558b30-0a19-412a-a1df-b6540852414c" variableName="X-Correlation-Id"/>
-		<json-logger:logger doc:name="Entry Global Request Logger" doc:id="15c79bc0-dc1a-421f-993d-3ca066384999" config-ref="Default_JSON_Logger_Config" priority="TRACE" message="#[p('app.name') ++ 'received request']"/>
 		<apikit:router config-ref="mule-pipeline-action-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
