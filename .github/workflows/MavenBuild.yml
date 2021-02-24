@@ -40,8 +40,8 @@ jobs:
       - name: Build Maven
         run: mvn --batch-mode verify "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
 
+      # Setup folder, move jar artifact, then upload
       - run: mkdir staging && cp target/*.jar staging
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
