@@ -15,11 +15,11 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	<http:listener-config name="mule-pipeline-action-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="${http.listener.port}" />
     </http:listener-config>
-    <apikit:config name="mule-pipeline-action-config" api="mule-pipeline-action.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="mule-pipeline-action-config" api="template-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <global-property doc:name="Global Property" doc:id="733a71cc-7ce5-4aa2-bc93-f70758867d9e" name="mule.env" value="dev" />
 	<configuration-properties doc:name="Common Config properties" doc:id="0cb861f4-7624-4aad-b183-f7090acd522e" file="config-common.yaml" />
 	<configuration-properties doc:name="Environment Config properties" doc:id="682b7177-5f77-410e-8f9c-268dd1136869" file="config-${mule.env}.yaml" />
-	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="af874e2f-8295-4207-90d4-ec6bbf0b1b9c" file="config-secure-${mule.env}.yaml" key="${encryption-key}" >
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="af874e2f-8295-4207-90d4-ec6bbf0b1b9c" file="config-secure-${mule.env}.yaml" key="${encryptionKey}" >
 		<secure-properties:encrypt algorithm="Blowfish" />
 	</secure-properties:config>
 	<api-gateway:autodiscovery apiId="${api.autodiscovery}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="27301305-3aee-454e-bd04-9d47384349c7" flowRef="mule-pipeline-action-main" />
