@@ -47,6 +47,10 @@ jobs:
               "id": "Exchange2",
               "username": "dlnmdev",
               "password": "${{ secrets.MAVEN_SERVER_PASS }}"
+            },{
+              "id": "MuleRepository",
+              "username": "dlnmdev",
+              "password": "${{ secrets.MAVEN_SERVER_PASS }}"
             }]
 
       # Initiate Maven Build
