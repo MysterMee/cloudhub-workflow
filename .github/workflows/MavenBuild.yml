@@ -38,7 +38,7 @@ jobs:
       - name: Build Maven
         run: mvn --batch-mode verify "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
 
-      - uses: mkdir staging && cp target/*.jar staging
+      - run: mkdir staging && cp target/*.jar staging
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
