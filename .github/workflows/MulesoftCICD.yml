@@ -72,16 +72,6 @@ jobs:
             echo 'Artifact does not contain runtime.properties!'
             exit 1
           fi
-          echo "${PWD}"
-          ls target
-          echo "${jarName}"
-          if [ -f "$PWD/${jarName}" ]; then
-            echo "$PWD/${jarName} exists"
-          else
-            echo "$PWD/${jarName} does not exist"
-          fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
-          set -- "$@" "${repoName}" "${PWD}/${jarName}"
-          echo "$@"
-          anypoint-cli runtime-mgr cloudhub-application deploy "$@" ||
-          anypoint-cli runtime-mgr cloudhub-application modify "$@"
+          set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
+          sh ./cloudhub-deploy.sh $@
