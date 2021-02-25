@@ -53,6 +53,6 @@ jobs:
           cp ./credentials ~/.anypoint/
           jarName=$(ls target/*.jar)
           repoName=${repository##*/}
-          set "--property encryptionKey:${encryption}" "'${repoName}'" "'${PWD}/${jarName}'"
+          set -- "--property encryptionKey:${encryption}" "'${repoName}'" "'${PWD}/${jarName}'"
           anypoint-cli runtime-mgr cloudhub-application deploy "$@" ||
           anypoint-cli runtime-mgr cloudhub-application modify "$@"
