@@ -47,7 +47,7 @@ jobs:
     steps:
       - shell: bash
         env:
-          repository: ${{ GITHUB_REPOSITORY }}
+          repository: github.repository
           credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
           encryption: ${{ secrets.ENCRYPTION_KEY }}
         run: |
