@@ -53,3 +53,4 @@ jobs:
           mkdir ~/.anypoint
           echo "$credentials" >> credentials
           cp -r ./credentials ~/.anypoint/
+          ls ~
