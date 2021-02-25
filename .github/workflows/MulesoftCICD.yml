@@ -52,5 +52,5 @@ jobs:
           sudo npm i -g anypoint-cli@latest
           mkdir ~/.anypoint
           echo "$credentials" >> credentials
-          cp -r ./credentials ~/.anypoint/
-          ls ~
+          cp ./credentials ~/.anypoint/
+          ls ~/.anypoint
