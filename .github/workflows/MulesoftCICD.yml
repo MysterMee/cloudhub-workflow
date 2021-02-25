@@ -54,10 +54,10 @@ jobs:
           jarName=$(ls target/*.jar)
           repoName=${repository##*/}
           ls src
-          if [ -f "$PWD/src/env/dev/deployment.properties" ]; then
+          if [ -f "$PWD/src/env/dev/deploy.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
-            done < "$PWD/src/env/dev/deployment.properties"
+            done < "$PWD/src/env/dev/deploy.properties"
           else
             echo 'Artifact does not contain deployment.properties!'
             exit 1
