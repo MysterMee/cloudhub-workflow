@@ -55,10 +55,10 @@ jobs:
           repoName=${repository##*/}
           ls
           echo "$PWD"
-          if [ -f "./env/dev/deployment.properties" ]; then
+          if [ -f "src/env/dev/deployment.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
-            done < "./env/dev/deployment.properties"
+            done < "src/env/dev/deployment.properties"
           else
             echo 'Artifact does not contain deployment.properties!'
             exit 1
