@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Mulesoft CI & CD
 
 # Controls when the action will run.
@@ -47,7 +45,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
-      - run: sudo npm i -g anypoint-cli@latest
-      - run: mkdir ~/.anypoint
-      - run: echo ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} | tee credentials |
-      - run: cp -r credentials ~/.anypoint/
+      - shell: bash
+        env:
+          credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
+        run: |
+          sudo npm i -g anypoint-cli@latest
+          mkdir ~/.anypoint
+          echo "$credentials" >> credentials
+          cp -r ./credentials ~/.anypoint/
