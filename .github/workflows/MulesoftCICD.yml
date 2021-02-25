@@ -53,7 +53,14 @@ jobs:
           cp ./credentials ~/.anypoint/
           jarName=$(ls target/*.jar)
           repoName=${repository##*/}
+          if [ -f "${PWD}/env/dev/deployment.properties" ]; then
+            while IFS='=' read key value; do
+              set -- $@ "--$key $value"
+            done < "${PWD}/env/dev/deployment.properties"
+          else
+            echo 'Artifact does not contain deployment.properties!'
+            exit 1
+          fi
           set -- "--property encryptionKey:${encryption}" "'${repoName}'" "'${PWD}/${jarName}'"
           anypoint-cli runtime-mgr cloudhub-application deploy "$@" ||
           anypoint-cli runtime-mgr cloudhub-application modify "$@"
-          echo env
