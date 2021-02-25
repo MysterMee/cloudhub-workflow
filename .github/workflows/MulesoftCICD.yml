@@ -73,5 +73,6 @@ jobs:
           fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
+          echo "$@"
           anypoint-cli runtime-mgr cloudhub-application deploy "$@" ||
           anypoint-cli runtime-mgr cloudhub-application modify "$@"
