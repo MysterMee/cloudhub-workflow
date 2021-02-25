@@ -34,7 +34,7 @@ jobs:
 
       # Build Maven
       - name: Build Maven
-        run: mvn --batch-mode verify "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
+        run: mvn --batch-mode package "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
 
       # Setup folder, move jar, then upload artifact
       - run: mkdir staging && cp target/*.jar staging
@@ -51,4 +51,4 @@ jobs:
         run: |
           sudo npm i -g anypoint-cli@latest
           mkdir ~/.anypoint
-          cp ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} ~/.anypoint
+          cp ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} ~/.anypoint/
