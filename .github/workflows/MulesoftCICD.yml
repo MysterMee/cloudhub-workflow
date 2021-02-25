@@ -45,9 +45,10 @@ jobs:
           path: staging
   deploy:
     runs-on: ubuntu-latest
+    needs: [ build ]
     steps:
       - name: Run Anypoint CLI Deploy Script
         run: |
           sudo npm i -g anypoint-cli@latest
           mkdir ~/.anypoint
-          cp ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} ~/.anypoint
+          cp "${{ secrets.ANYPOINT_CREDENTIALS_FILE }}" ~/.anypoint
