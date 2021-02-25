@@ -51,5 +51,6 @@ jobs:
         run: |
           sudo npm i -g anypoint-cli@latest
           mkdir ~/.anypoint
-          echo ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} > credentials
+          echo ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} >> credentials
+          ls
           cp credentials ~/.anypoint/
