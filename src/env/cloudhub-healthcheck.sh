@@ -7,8 +7,8 @@ sleep $tick
 
 until [ $counter -gt $timeout ]
 do
-  status=$(anypoint-cli runtime-mgr cloudhub-application describe $repoName -o json | jq -r '.Status')
-  echo $status
+  echo `anypoint-cli runtime-mgr cloudhub-application describe $repoName -o json`
+  status=`anypoint-cli runtime-mgr cloudhub-application describe $repoName -o json | jq -r '.Status'`
   if [ $status == "STARTED" ]; then
     echo 'Deployment has started on cloudhub.'
     exit 0
