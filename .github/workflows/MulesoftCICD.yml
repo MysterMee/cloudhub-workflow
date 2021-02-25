@@ -53,6 +53,7 @@ jobs:
           cp ./credentials ~/.anypoint/
           jarName=$(ls target/*.jar)
           repoName=${repository##*/}
+          ls src
           if [ -f "$PWD/src/env/dev/deployment.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
