@@ -49,8 +49,8 @@ jobs:
     steps:
       - name: Run Anypoint CLI Deploy Script
         run: |
-          sudo npm i -g anypoint-cli@latest
-          mkdir ~/.anypoint
-          echo ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} | tee credentials
-          echo "$PATH"
+          sudo npm i -g anypoint-cli@latest |
+          mkdir ~/.anypoint |
+          echo ${{ secrets.ANYPOINT_CREDENTIALS_FILE }} | tee credentials |
+          echo "$PATH" |
           cp -r credentials ~/.anypoint/
