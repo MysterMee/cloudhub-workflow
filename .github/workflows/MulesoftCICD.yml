@@ -43,7 +43,7 @@ jobs:
           path: staging
       - shell: bash
         env:
-          repository: github.repository
+          repository: ${{ github.repository }}
           credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
           encryption: ${{ secrets.ENCRYPTION_KEY }}
           clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
@@ -71,6 +71,8 @@ jobs:
             echo 'Artifact does not contain runtime.properties!'
             exit 1
           fi
+          echo "${PWD}"
+          echo "${jarName}"
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
           echo "$@"
