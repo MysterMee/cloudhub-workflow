@@ -53,12 +53,10 @@ jobs:
           cp ./credentials ~/.anypoint/
           jarName=$(ls target/*.jar)
           repoName=${repository##*/}
-          ls
-          echo "$PWD"
-          if [ -f "./src/env/dev/deployment.properties" ]; then
+          if [ -f "$PWD/src/env/dev/deployment.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
-            done < "./src/env/dev/deployment.properties"
+            done < "$PWD/src/env/dev/deployment.properties"
           else
             echo 'Artifact does not contain deployment.properties!'
             exit 1
