@@ -13,8 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,30 +31,35 @@ jobs:
 
       # Build Maven
       - name: Build Maven
-        run: mvn --batch-mode package "-DencryptionKey=${{ secrets.ENCRYPTION_KEY }}"
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+        run:  |
+          mvn --batch-mode package "-DencryptionKey=${encryption}"
 
-      # Setup folder, move jar, then upload artifact
-      - run: mkdir staging && cp target/*.jar staging
+      #mkdir staging && cp target/*.jar staging
 
       #- name: Upload Artifact
       #  uses: actions/upload-artifact@v2
       #  with:
       #    name: Package
       #    path: staging
-      - shell: bash
+      - name: Deploy to Cloudhub
+        shell: bash
         env:
           repository: ${{ github.repository }}
           credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
-          encryption: ${{ secrets.ENCRYPTION_KEY }}
+
           clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
           clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
         run: |
           sudo npm i -g anypoint-cli@latest
+          sudo apt-get -y install jq
           mkdir ~/.anypoint
           echo "$credentials" >> credentials
           cp ./credentials ~/.anypoint/
           jarName=$(ls target/*.jar)
-          repoName=${repository##*/}
+          repoName="${repository##*/}-dev"
           if [ -f "$PWD/src/env/dev/deploy.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
@@ -74,4 +78,6 @@ jobs:
           fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
+          set -e
+          anypoint-cli runtime-mgr cloudhub-application start "'${repoName}'"
           sh "${PWD}/src/env/cloudhub-deploy.sh" $@
