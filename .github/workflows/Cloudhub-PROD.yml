@@ -16,6 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   pipeline:
+    environment: prod
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -60,29 +61,40 @@ jobs:
           mkdir ~/.anypoint
           echo "$credentials" >> credentials
           cp ./credentials ~/.anypoint/
+          rm credentials
+          export ANYPOINT_PROFILE="${environment}"
           jarName=$(ls target/*.jar)
           repoName="${repository##*/}-${environment}"
           set -- "${repoName}"
-          bash "${PWD}/src/automation/cloudhub-start.sh" $@
+          bash "${PWD}/automation/cloudhub-start.sh" $@
           set --
-          if [ -f "$PWD/src/automation/env/${environment}/deploy.properties" ]; then
+          if [ -f "$PWD/automation/env/${environment}/deploy.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
-            done < "$PWD/src/automation/env/${environment}/deploy.properties"
+            done < "$PWD/automation/env/${environment}/deploy.properties"
           else
             echo 'Artifact does not contain deployment.properties!'
             exit 1
           fi
-          if [ -f "$PWD/src/automation/env/${environment}/runtime.properties" ]; then
+          if [ -f "$PWD/automation/env/${environment}/runtime.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--property $key:$value"
-            done < "$PWD/src/automation/env/${environment}/runtime.properties"
+            done < "$PWD/automation/env/${environment}/runtime.properties"
           else
             echo 'Artifact does not contain runtime.properties!'
             exit 1
           fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
-          bash "${PWD}/src/automation/cloudhub-deploy.sh" $@
+          bash "${PWD}/automation/cloudhub-deploy.sh" $@
           set -- "'${repoName}'"
-          bash "${PWD}/src/automation/cloudhub-healthcheck.sh" $@
+          bash "${PWD}/automation/cloudhub-healthcheck.sh" $@
+
+      - name: Post-deployment API Tests
+        shell: bash
+        env:
+          repository: ${{ github.repository }}
+        run: |
+          sudo npm i -g newman@latest
+          repoName="${repository##*/}"
+          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/prod.postman_environment.json"

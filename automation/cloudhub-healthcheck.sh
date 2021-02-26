@@ -2,7 +2,7 @@
 
 counter=0
 tick=10
-timeout=300
+timeout=450
 status=''
 
 echo 'Starting the healthcheck. Below are the status report:'
