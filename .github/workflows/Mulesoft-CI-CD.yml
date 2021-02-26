@@ -54,7 +54,6 @@ jobs:
           clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
         run: |
           sudo npm i -g anypoint-cli@latest
-          sudo apt-get -y install jq
           mkdir ~/.anypoint
           echo "$credentials" >> credentials
           cp ./credentials ~/.anypoint/
