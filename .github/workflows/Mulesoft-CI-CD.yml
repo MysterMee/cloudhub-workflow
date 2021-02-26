@@ -60,7 +60,7 @@ jobs:
           jarName=$(ls target/*.jar)
           repoName="${repository##*/}-dev"
           set -- "${repoName}"
-          sh "${PWD}/src/env/cloudhub-start.ch" $@
+          sh "${PWD}/src/env/cloudhub-start.sh" $@
           set --
           if [ -f "$PWD/src/env/dev/deploy.properties" ]; then
             while IFS='=' read key value; do
