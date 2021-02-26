@@ -79,4 +79,5 @@ jobs:
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
           sh "${PWD}/src/env/cloudhub-deploy.sh" $@
+          set -- "'${repoName}'"
           sh "${PWD}/src/env/cloudhub-healthcheck.sh"
