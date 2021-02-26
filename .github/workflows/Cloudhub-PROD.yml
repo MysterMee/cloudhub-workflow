@@ -59,7 +59,10 @@ jobs:
         run: |
           sudo npm i -g anypoint-cli@latest
           mkdir ~/.anypoint
-          echo "$credentials" >> .anypoint/credentials
+          echo "$credentials" >> credentials
+          cp ./credentials ~/.anypoint/
+          rm credentials
+          export ANYPOINT_PROFILE="${environment}"
           jarName=$(ls target/*.jar)
           repoName="${repository##*/}-${environment}"
           set -- "${repoName}"
