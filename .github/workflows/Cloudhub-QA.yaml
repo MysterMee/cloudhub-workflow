@@ -63,26 +63,26 @@ jobs:
           jarName=$(ls target/*.jar)
           repoName="${repository##*/}-${environment}"
           set -- "${repoName}"
-          bash "${PWD}/src/env/cloudhub-start.sh" $@
+          bash "${PWD}/src/automation/cloudhub-start.sh" $@
           set --
-          if [ -f "$PWD/src/env/${environment}/deploy.properties" ]; then
+          if [ -f "$PWD/src/automation/${environment}/deploy.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
-            done < "$PWD/src/env/${environment}/deploy.properties"
+            done < "$PWD/src/automation/${environment}/deploy.properties"
           else
             echo 'Artifact does not contain deployment.properties!'
             exit 1
           fi
-          if [ -f "$PWD/src/env/${environment}/runtime.properties" ]; then
+          if [ -f "$PWD/src/automation/${environment}/runtime.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--property $key:$value"
-            done < "$PWD/src/env/${environment}/runtime.properties"
+            done < "$PWD/src/automation/${environment}/runtime.properties"
           else
             echo 'Artifact does not contain runtime.properties!'
             exit 1
           fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
-          bash "${PWD}/src/env/cloudhub-deploy.sh" $@
+          bash "${PWD}/src/automation/cloudhub-deploy.sh" $@
           set -- "'${repoName}'"
-          bash "${PWD}/src/env/cloudhub-healthcheck.sh" $@
+          bash "${PWD}/src/automation/cloudhub-healthcheck.sh" $@
