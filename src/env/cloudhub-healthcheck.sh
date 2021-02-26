@@ -1,3 +1,4 @@
+#!/bin/bash
 
 counter=0
 tick=10

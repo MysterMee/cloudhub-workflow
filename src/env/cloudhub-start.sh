@@ -1,3 +1,4 @@
+#!/bin/bash
 
 status=`anypoint-cli runtime-mgr cloudhub-application describe "$@" -o json | jq -r '.Status'`
 if [[ "$status" = "UNDEPLOYED" ]]; then
