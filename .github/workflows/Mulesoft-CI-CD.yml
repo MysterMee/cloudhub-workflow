@@ -60,7 +60,7 @@ jobs:
           jarName=$(ls target/*.jar)
           repoName="${repository##*/}-dev"
           set -- "${repoName}"
-          bash sh "${PWD}/src/env/cloudhub-start.sh" $@
+          sh "${PWD}/src/env/cloudhub-start.sh" $@
           set --
           if [ -f "$PWD/src/env/dev/deploy.properties" ]; then
             while IFS='=' read key value; do
@@ -80,6 +80,6 @@ jobs:
           fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
-          bash sh "${PWD}/src/env/cloudhub-deploy.sh" $@
+          sh "${PWD}/src/env/cloudhub-deploy.sh" $@
           set -- "'${repoName}'"
-          bash sh "${PWD}/src/env/cloudhub-healthcheck.sh" $@
+          sh "${PWD}/src/env/cloudhub-healthcheck.sh" $@
