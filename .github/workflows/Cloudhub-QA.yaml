@@ -65,18 +65,18 @@ jobs:
           set -- "${repoName}"
           bash "${PWD}/src/automation/cloudhub-start.sh" $@
           set --
-          if [ -f "$PWD/src/automation/${environment}/deploy.properties" ]; then
+          if [ -f "$PWD/src/automation/env/${environment}/deploy.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
-            done < "$PWD/src/automation/${environment}/deploy.properties"
+            done < "$PWD/src/automation/env/${environment}/deploy.properties"
           else
             echo 'Artifact does not contain deployment.properties!'
             exit 1
           fi
-          if [ -f "$PWD/src/automation/${environment}/runtime.properties" ]; then
+          if [ -f "$PWD/src/automation/env/${environment}/runtime.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--property $key:$value"
-            done < "$PWD/src/automation/${environment}/runtime.properties"
+            done < "$PWD/src/automation/env/${environment}/runtime.properties"
           else
             echo 'Artifact does not contain runtime.properties!'
             exit 1
