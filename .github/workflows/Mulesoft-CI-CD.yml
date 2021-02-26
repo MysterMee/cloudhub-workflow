@@ -48,8 +48,8 @@ jobs:
         shell: bash
         env:
           repository: ${{ github.repository }}
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
           credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
-
           clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
           clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
         run: |
@@ -80,4 +80,5 @@ jobs:
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
           sh "${PWD}/src/env/cloudhub-deploy.sh" $@
           set -- "'${repoName}'"
+          echo "$@"
           sh "${PWD}/src/env/cloudhub-healthcheck.sh" $@

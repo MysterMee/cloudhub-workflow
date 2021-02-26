@@ -2,18 +2,20 @@
 counter=0
 tick=10
 timeout=300
+status=''
 
 sleep $tick
 
+echo `anypoint-cli runtime-mgr cloudhub-application describe "$@" -o json`
+
 until [ $counter -gt $timeout ]
 do
-  echo `anypoint-cli runtime-mgr cloudhub-application describe $@ -o json`
-  status=`anypoint-cli runtime-mgr cloudhub-application describe $@ -o json | jq -r '.Status'`
+  status=`anypoint-cli runtime-mgr cloudhub-application describe "$@" -o json | jq -r '.Status'`
   if [ $status == "STARTED" ]; then
     echo 'Deployment has started on cloudhub.'
     exit 0
     break
-  elif [[ $status == "DEPLOYING" || $status == "UPDATING" ]]; then
+  elif [ $status == "DEPLOYING" ] | [ $status == "UPDATING" ]; then
     (( counter = counter + tick ))
     echo 'Currently still deploying or updating.'
     sleep $tick
