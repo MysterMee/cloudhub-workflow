@@ -61,7 +61,7 @@ jobs:
           rm credentials
           export ANYPOINT_PROFILE="${environment}"
           jarName=$(ls target/*.jar)
-          repoName="${repository##*/}-${environment}"
+          repoName="${repository##*/}"
           set -- "${repoName}"
           bash "${PWD}/automation/cloudhub-start.sh" $@
           set --
