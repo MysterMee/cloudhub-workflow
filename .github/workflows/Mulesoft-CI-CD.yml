@@ -59,6 +59,9 @@ jobs:
           cp ./credentials ~/.anypoint/
           jarName=$(ls target/*.jar)
           repoName="${repository##*/}-dev"
+          set -- "${repoName}"
+          sh "${PWD}/src/env/cloudhub-start.ch" $@
+          set --
           if [ -f "$PWD/src/env/dev/deploy.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
@@ -74,12 +77,6 @@ jobs:
           else
             echo 'Artifact does not contain runtime.properties!'
             exit 1
-          fi
-          status=`anypoint-cli runtime-mgr cloudhub-application describe "$@" -o json | jq -r '.Status'`
-          if [ $status == "UNDEPLOYED" ]; then
-            echo 'Deployment was detected to be undeployed, so starting the application'
-            anypoint-cli runtime-mgr cloudhub-application start "'${repoName}'"
-            break
           fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
