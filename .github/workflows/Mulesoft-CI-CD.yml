@@ -76,6 +76,12 @@ jobs:
             echo 'Artifact does not contain runtime.properties!'
             exit 1
           fi
+          status=`anypoint-cli runtime-mgr cloudhub-application describe "$@" -o json | jq -r '.Status'`
+          if [ $status == "UNDEPLOYED" ]; then
+            echo 'Deployment was detected to be undeployed, so starting the application'
+            anypoint-cli runtime-mgr cloudhub-application start "'${repoName}'"
+            break
+          fi
           set -- "$@" "--property encryptionKey:${encryption}" "--property anypoint.platform.client_id:${clientId}" "--property anypoint.platform.client_secret:${clientSecret}"
           set -- "$@" "'${repoName}'" "'${PWD}/${jarName}'"
           sh "${PWD}/src/env/cloudhub-deploy.sh" $@

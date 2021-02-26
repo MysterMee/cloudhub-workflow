@@ -6,8 +6,6 @@ status=''
 
 sleep $tick
 
-echo `anypoint-cli runtime-mgr cloudhub-application describe "$@" -o json`
-
 until [ $counter -gt $timeout ]
 do
   status=`anypoint-cli runtime-mgr cloudhub-application describe "$@" -o json | jq -r '.Status'`
