@@ -13,9 +13,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  environment: prod
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   pipeline:
@@ -52,6 +49,7 @@ jobs:
       - name: Deploy to Cloudhub
         shell: bash
         env:
+          environment: prod
           repository: ${{ github.repository }}
           encryption: ${{ secrets.ENCRYPTION_KEY }}
           credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
