@@ -89,3 +89,12 @@ jobs:
           bash "${PWD}/src/automation/cloudhub-deploy.sh" $@
           set -- "'${repoName}'"
           bash "${PWD}/src/automation/cloudhub-healthcheck.sh" $@
+          
+      - name: Post-deployment API Tests
+        shell: bash
+        env:
+          repository: ${{ github.repository }}
+        run: |
+          sudo npm i -g newman@latest
+          repoName="${repository##*/}"
+          newman run automation/tests/${repoName}.postman_collection.json -e automation/tests/dev.postman_environment.json
