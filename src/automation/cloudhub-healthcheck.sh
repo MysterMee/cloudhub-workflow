@@ -5,6 +5,7 @@ tick=10
 timeout=300
 status=''
 
+echo 'Starting the healthcheck. Below are the status report:'
 sleep $tick
 
 until [ $counter -gt $timeout ]
@@ -16,7 +17,7 @@ do
     break
   elif [[ "$status" = "DEPLOYING" || "$status" = "UPDATING" ]]; then
     (( counter = counter + tick ))
-    echo 'Currently still deploying or updating.'
+    echo "Currently still deploying or updating, ${counter} seconds elapsed."
     sleep $tick
   else
     echo 'Unexpected state detected! Check deployment at cloudhub for more details.'

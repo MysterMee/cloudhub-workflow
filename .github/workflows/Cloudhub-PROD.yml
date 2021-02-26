@@ -1,15 +1,20 @@
-name: Mulesoft CI & CD
+name: Cloudhub - CI/CD - PROD
 
 # Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ develop ]
+    branches:
+      - 'master'
   pull_request:
-    branches: [ develop ]
+    branches:
+      - 'master'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+env:
+  environment: prod
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -58,22 +63,22 @@ jobs:
           echo "$credentials" >> credentials
           cp ./credentials ~/.anypoint/
           jarName=$(ls target/*.jar)
-          repoName="${repository##*/}-dev"
+          repoName="${repository##*/}-${{ environment }}"
           set -- "${repoName}"
           bash "${PWD}/src/env/cloudhub-start.sh" $@
           set --
-          if [ -f "$PWD/src/env/dev/deploy.properties" ]; then
+          if [ -f "$PWD/src/env/${{ environment }}/deploy.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--$key $value"
-            done < "$PWD/src/env/dev/deploy.properties"
+            done < "$PWD/src/env/${{ environment }}/deploy.properties"
           else
             echo 'Artifact does not contain deployment.properties!'
             exit 1
           fi
-          if [ -f "$PWD/src/env/dev/runtime.properties" ]; then
+          if [ -f "$PWD/src/env/${{ environment }}/runtime.properties" ]; then
             while IFS='=' read key value; do
               set -- $@ "--property $key:$value"
-            done < "$PWD/src/env/dev/runtime.properties"
+            done < "$PWD/src/env/${{ environment }}/runtime.properties"
           else
             echo 'Artifact does not contain runtime.properties!'
             exit 1
