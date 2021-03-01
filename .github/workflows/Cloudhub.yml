@@ -75,7 +75,7 @@ jobs:
           newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
 
   qa-deploy:
-    needs: build
+    needs: dev-deploy
     environment: qa
     env:
       environment: qa
@@ -107,7 +107,7 @@ jobs:
           newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
 
   prod-deploy:
-    needs: build
+    needs: qa-deploy
     environment: prod
     env:
       environment: prod
