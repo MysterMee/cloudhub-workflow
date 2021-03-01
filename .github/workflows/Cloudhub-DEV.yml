@@ -1,4 +1,4 @@
-name: Cloudhub - CI/CD - DEV
+name: Cloudhub - Workflow
 
 # Controls when the action will run.
 on:
@@ -13,8 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  pipeline:
-    environment: dev
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -35,19 +34,27 @@ jobs:
         shell: bash
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run:  |
-          mkdir ~//m2
-          echo "<settings><servers><server><id>github</id><username>MysterMee</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
-          mvn --batch-mode package deploy "-DencryptionKey=${encryption}"
+          mkdir ~/.m2
+          mvn --batch-mode package "-DencryptionKey=${encryption}"
+          mkdir staging && cp target/*.jar staging
 
-      #mkdir staging && cp target/*.jar staging
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: staging
 
-      #- name: Upload Artifact
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    name: Package
-      #    path: staging
+  dev-deploy:
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: artifact
+          path: staging
+
       - name: Deploy to Cloudhub
         shell: bash
         env:
@@ -64,7 +71,8 @@ jobs:
           cp ./credentials ~/.anypoint/
           rm credentials
           export ANYPOINT_PROFILE="${environment}"
-          jarName=$(ls target/*.jar)
+          echo $(ls staging)
+          jarName=$(ls staging/*.jar)
           repoName="${repository##*/}-${environment}"
           set -- "${repoName}"
           bash "${PWD}/automation/cloudhub-start.sh" $@
