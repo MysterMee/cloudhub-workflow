@@ -36,7 +36,7 @@ jobs:
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
         run:  |
-          mvn --batch-mode package "-DencryptionKey=${encryption}"
+          mvn --batch-mode package deploy "-DencryptionKey=${encryption}"
 
       #mkdir staging && cp target/*.jar staging
 
