@@ -65,7 +65,7 @@ jobs:
           credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
           clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
           clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
-        run: bash "${PWD}/automation/cloudhub-healthcheck.sh"
+        run: bash "${PWD}/automation/github-runner.sh"
 
       - name: C.) Post-deployment API Tests
         shell: bash
