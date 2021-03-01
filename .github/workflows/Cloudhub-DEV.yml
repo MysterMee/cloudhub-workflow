@@ -35,7 +35,11 @@ jobs:
         shell: bash
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }2}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run:  |
+          mkdir ~//m2
+          echo "<settings><servers><server><id>github</id><username>${GITHUB_ACTOR}</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
           mvn --batch-mode package deploy "-DencryptionKey=${encryption}"
 
       #mkdir staging && cp target/*.jar staging
