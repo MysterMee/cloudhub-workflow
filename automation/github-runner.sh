@@ -11,7 +11,7 @@ rm credentials
 export ANYPOINT_PROFILE="${environment}"
 
 # Extract full jar name of the built artifact
-jarName=$(ls staging/*.jar
+jarName=$(ls staging/*.jar)
 
 # Run cloudhub-start.sh
 #   Starts up applications in cloudhub in UNDEPLOYED status before proceeding to the next steps.
