@@ -102,7 +102,7 @@
       <repository>
         <id>github</id>
         <name>GitHub MysterMee Apache Maven Packages</name>
-        <url>https://maven.pkg.github.com/MysterMee/mule-pipeline-action</url>
+        <url>https://maven.pkg.github.com/MysterMee/cloudhub-workflow</url>
       </repository>
    </distributionManagement>
    <repositories>
