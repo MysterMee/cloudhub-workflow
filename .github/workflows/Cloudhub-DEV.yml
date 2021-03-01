@@ -46,6 +46,7 @@ jobs:
           path: staging
 
   dev-deploy:
+    needs: build
     environment: dev
     runs-on: ubuntu-latest
     steps:
