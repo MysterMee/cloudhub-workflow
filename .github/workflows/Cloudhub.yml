@@ -74,66 +74,66 @@ jobs:
           repoName="${repository##*/}"
           newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
 
-    qa-deploy:
-      needs: build
+  qa-deploy:
+    needs: build
+    environment: qa
+    env:
       environment: qa
-      env:
-        environment: qa
-        repository: ${{ github.repository }}
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
+      repository: ${{ github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-        - name: A.) Download Artifact
-          uses: actions/download-artifact@v1
-          with:
-            name: artifact
-            path: staging
+      - name: A.) Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: artifact
+          path: staging
 
-        - name: B.) Deploy to Cloudhub
-          shell: bash
-          env:
-            encryption: ${{ secrets.ENCRYPTION_KEY }}
-            credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
-            clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
-            clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
-          run: bash "${PWD}/automation/github-runner-nonprod.sh"
+      - name: B.) Deploy to Cloudhub
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+          credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
+          clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
+          clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+        run: bash "${PWD}/automation/github-runner-nonprod.sh"
 
-        - name: C.) Post-deployment API Tests
-          shell: bash
-          run: |
-            sudo npm i -g newman@latest
-            repoName="${repository##*/}"
-            newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
+      - name: C.) Post-deployment API Tests
+        shell: bash
+        run: |
+          sudo npm i -g newman@latest
+          repoName="${repository##*/}"
+          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
 
-    prod-deploy:
-      needs: build
+  prod-deploy:
+    needs: build
+    environment: prod
+    env:
       environment: prod
-      env:
-        environment: prod
-        repository: ${{ github.repository }}
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
+      repository: ${{ github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-        - name: A.) Download Artifact
-          uses: actions/download-artifact@v1
-          with:
-            name: artifact
-            path: staging
+      - name: A.) Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: artifact
+          path: staging
 
-        - name: B.) Deploy to Cloudhub
-          shell: bash
-          env:
-            encryption: ${{ secrets.ENCRYPTION_KEY }}
-            credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
-            clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
-            clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
-          run: bash "${PWD}/automation/github-runner-nonprod.sh"
+      - name: B.) Deploy to Cloudhub
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+          credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
+          clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
+          clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+        run: bash "${PWD}/automation/github-runner-nonprod.sh"
 
-        - name: C.) Post-deployment API Tests
-          shell: bash
-          run: |
-            sudo npm i -g newman@latest
-            repoName="${repository##*/}"
-            newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
+      - name: C.) Post-deployment API Tests
+        shell: bash
+        run: |
+          sudo npm i -g newman@latest
+          repoName="${repository##*/}"
+          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
