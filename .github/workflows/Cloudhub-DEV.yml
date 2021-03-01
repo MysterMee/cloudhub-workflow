@@ -49,6 +49,7 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Download Artifact
         uses: actions/download-artifact@v1
         with:
@@ -71,7 +72,6 @@ jobs:
           cp ./credentials ~/.anypoint/
           rm credentials
           export ANYPOINT_PROFILE="${environment}"
-          echo $(ls staging)
           jarName=$(ls staging/*.jar)
           repoName="${repository##*/}-${environment}"
           set -- "${repoName}"
