@@ -15,7 +15,11 @@ jarName=$(ls staging/*.jar)
 
 # Run cloudhub-start.sh
 #   Starts up applications in cloudhub in UNDEPLOYED status before proceeding to the next steps.
-repoName="${repository##*/}-${environment}"
+if [[ "${environment}" == "prod" ]]; then
+  repoName="${repository##*/}"
+else
+  repoName="${repository##*/}-${environment}"
+fi
 set -- "${repoName}"
 bash "${PWD}/automation/cloudhub-start.sh" $@
 
