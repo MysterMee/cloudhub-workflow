@@ -15,9 +15,8 @@ This is a template repository to get a CI/CD setup utilizing github actions to d
 You'll need **Git Bash** and **NPM** installed locally for initial setup.
 <details>
 <summary>
-### 1.) Anypoint Credentials File:
+<h3>1.) Anypoint Credentials File:</h3>
 </summary>
-<br/>
 The Anypoint CLI is leveraged to interface with Cloudhub directly. This requires setting up a credentials file for secure authentication, which we will eventually upload to github as a secret (note this file is non-accessible once set as a secret.) It's a good idea to test everything locally before uploading. Here's a brief explanation of getting it working locally:
 
 ##### Run the following in your bash:
@@ -75,9 +74,8 @@ You should see a list of all of the environments in your org. This verifies your
 </details>
 <details>
 <summary>
-### 2.) Setup Secrets in Github
+<h3>2.) Setup Secrets in Github</h3>
 </summary>
-<br/>
 Within the settings of the repo you are configuring, open up the Environments tab. Open up as many environments needed to match whatever was put into the credentials file from earlier.
 
 Within Actions Secrets under Settings, this template requires specific declarations of variables the scripts will reference.
@@ -86,10 +84,13 @@ Ensure the following are declared:
 
 1.) **ANYPOINT_CREDENTIALS_FILE** - Repository Secret
 This is the credentials file you setup earlier. You can simply copy and paste the contents into the text box and save.
+
 2.) **ANYPOINT_PLATFORM_CLIENT_ID** - Environment Secret
 This is the `-Danypoint.platform.client_id` property that allows the cloudhub application to leverage other features of the anypoint platform.
+
 3.) **ANYPOINT_PLATFORM_CLIENT_SECRET** - Environment Secret
 This is the `-Danypoint.platform.client_secret` property that allows the cloudhub application to leverage other features of the anypoint platform.
+
 4.) **ENCRYPTION_KEY** - Either Repository or Environment Secret
 Assuming that your project uses a `-DencryptionKey` property to isolate key from the project, this is where the template will reference that to inject it during deployment. If it's the same across all of the environments it should be a Repository secret.
 </details>
