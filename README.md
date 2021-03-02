@@ -15,7 +15,7 @@ This is a template repository to get a CI/CD setup utilizing github actions to d
 You'll need **Git Bash** and **NPM** installed locally for initial setup.
 <details>
 <summary>
-<h3>1.) Anypoint Credentials File:</h3>
+1.) Anypoint Credentials File:
 </summary>
 The Anypoint CLI is leveraged to interface with Cloudhub directly. This requires setting up a credentials file for secure authentication, which we will eventually upload to github as a secret (note this file is non-accessible once set as a secret.) It's a good idea to test everything locally before uploading. Here's a brief explanation of getting it working locally:
 
@@ -74,7 +74,7 @@ You should see a list of all of the environments in your org. This verifies your
 </details>
 <details>
 <summary>
-<h3>2.) Setup Secrets in Github</h3>
+2.) Setup Secrets in Github
 </summary>
 Within the settings of the repo you are configuring, open up the Environments tab. Open up as many environments needed to match whatever was put into the credentials file from earlier.
 
