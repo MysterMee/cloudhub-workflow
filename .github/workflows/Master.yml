@@ -3,7 +3,7 @@ name: Master
 # Pushes to Master will deploy to Cloudhub-Dev immediately, but Cloudhub-QA will require approval
 
 on:
-  push:
+  branch:
     branches:
       - 'master'
 
@@ -15,13 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
 
       # Cache Maven Dependencies
-      - name: A.) Cache Maven packages
+      - name: A) Cache Maven packages
         uses: actions/cache@v2
         with:
           path: ~/.m2
@@ -29,16 +31,26 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       # Build Maven
-      - name: B.) Build Maven
+      - name: B) Build Maven
         shell: bash
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
         run:  |
-          mvn --batch-mode package "-DencryptionKey=${encryption}"
+          mvn -B test "-DencryptionKey=${encryption}"
           mkdir staging && cp target/*.jar staging
 
+      - name: C) Enumerate Maven Version
+        shell: bash
+        run: |
+          bash "${PWD}/automation/version-enumerate.sh"
+
+      - name: D) Commit Version Update
+        uses: stefanzweifel/git-auto-commit-action@v4
+          commit_message: Enumerate Maven Version
+          file_pattern: pom.xml
+
       # Upload Artifact within Workflow scope
-      - name: C.) Upload Artifact
+      - name: E) Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: artifact
@@ -54,13 +66,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: A.) Download Artifact
+      - name: A) Download Artifact
         uses: actions/download-artifact@v1
         with:
           name: artifact
           path: staging
 
-      - name: B.) Deploy to Cloudhub
+      - name: B) Deploy to Cloudhub
         shell: bash
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
@@ -86,13 +98,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: A.) Download Artifact
+      - name: A) Download Artifact
         uses: actions/download-artifact@v1
         with:
           name: artifact
           path: staging
 
-      - name: B.) Deploy to Cloudhub
+      - name: B) Deploy to Cloudhub
         shell: bash
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
