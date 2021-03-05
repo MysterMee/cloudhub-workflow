@@ -46,6 +46,7 @@ jobs:
 
       - name: D) Commit Version Update
         uses: stefanzweifel/git-auto-commit-action@v4
+        with:
           commit_message: Enumerate Maven Version
           file_pattern: pom.xml
 
