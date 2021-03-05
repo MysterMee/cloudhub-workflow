@@ -3,7 +3,7 @@ name: Master
 # Pushes to Master will deploy to Cloudhub-Dev immediately, but Cloudhub-QA will require approval
 
 on:
-  branch:
+  push:
     branches:
       - 'master'
 
