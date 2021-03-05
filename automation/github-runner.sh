@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Download Anypoint CLI to the runner
 sudo npm i -g anypoint-cli@latest
 
