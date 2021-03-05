@@ -1,0 +1,74 @@
+name: Releases
+
+# Pushes to Release will deploy to Cloudhub-Prod with required approvals
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      # Cache Maven Dependencies
+      - name: A.) Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      # Build Maven
+      - name: B.) Build Maven
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+        run:  |
+          mvn --batch-mode package "-DencryptionKey=${encryption}"
+          mkdir staging && cp target/*.jar staging
+
+      # Upload Artifact within Workflow scope
+      - name: C.) Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: staging
+
+  prod-deploy:
+    needs: qa-deploy
+    environment: prod
+    env:
+      environment: prod
+      repository: ${{ github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: A.) Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: artifact
+          path: staging
+
+      - name: B.) Deploy to Cloudhub
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+          credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
+          clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
+          clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+        run: bash "${PWD}/automation/github-runner.sh"
+
+#      - name: C.) Post-deployment API Tests
+#        shell: bash
+#        run: |
+#          sudo npm i -g newman@latest
+#          repoName="${repository##*/}"
+#          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
