@@ -36,7 +36,7 @@ jobs:
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
         run:  |
-          mvn -B test "-DencryptionKey=${encryption}"
+          mvn -B package test "-DencryptionKey=${encryption}"
           mkdir staging && cp target/*.jar staging
 
       - name: C) Enumerate Maven Version
@@ -50,8 +50,17 @@ jobs:
           commit_message: Enumerate Maven Version
           file_pattern: pom.xml
 
+      # Rebuild Maven with version update
+      - name: E) Build Maven
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+        run:  |
+          mvn -B clean package "-DencryptionKey=${encryption}"
+          mkdir staging && cp target/*.jar staging
+
       # Upload Artifact within Workflow scope
-      - name: E) Upload Artifact
+      - name: F) Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: artifact

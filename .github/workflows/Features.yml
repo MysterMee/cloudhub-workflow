@@ -34,4 +34,4 @@ jobs:
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
         run:  |
-          mvn --batch-mode test "-DencryptionKey=${encryption}"
+          mvn -B package test "-DencryptionKey=${encryption}"
