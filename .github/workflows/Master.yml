@@ -30,41 +30,35 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Build Maven
-      - name: B) Build Maven
-        shell: bash
-        env:
-          encryption: ${{ secrets.ENCRYPTION_KEY }}
-        run:  |
-          mvn -B package test "-DencryptionKey=${encryption}"
-          mkdir staging && cp target/*.jar staging
-
-      - name: C) Enumerate Maven Version
+      # Increase POM file version
+      - name: B) Enumerate Maven Version
         shell: bash
         run: |
           bash "${PWD}/automation/version-enumerate.sh"
 
-      - name: D) Commit Version Update
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Enumerate Maven Version
-          file_pattern: pom.xml
-
-      # Rebuild Maven with version update
-      - name: E) Build Maven
+      # Build Maven
+      - name: C) Build Maven
         shell: bash
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
         run:  |
-          mvn -B clean package "-DencryptionKey=${encryption}"
+          mvn -B package "-DencryptionKey=${encryption}"
           mkdir staging && cp target/*.jar staging
 
       # Upload Artifact within Workflow scope
-      - name: F) Upload Artifact
+      - name: D) Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: artifact
           path: staging
+
+      # Commit the increase in the pom file to the branch
+      # Github actions cannot recurse on trigger
+      - name: E) Commit Version Update
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Enumerate Maven Version
+          file_pattern: pom.xml
 
   dev-deploy:
     needs: build
