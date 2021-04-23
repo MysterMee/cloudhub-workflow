@@ -30,13 +30,19 @@ jobs:
 
       # Populate Custom Settings File
       - name: B) Build Settings File
-        uses: whelk-io/maven-settings-xml-action@v14
-        env:
-          nexusId: ${{ secrets.NEXUS_ID }}
-          nexusSecret: ${{ secrets.NEXUS_SECRET }}
+        uses: s4u/maven-settings-action@v2.4.0
         with:
-          repositories: '[{"id": "MuleRepository", "url": "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/"}]'
-          servers: '[{"id": "MuleRepository","username": "${env.nexusId}","password": "${env.nexusSecret}"}]'
+          repositories: |
+            [{
+              "id": "MuleRepository",
+              "url": "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/"
+            }]
+          servers: |
+            [{
+              "id": "MuleRepository",
+              "username": "${{ secrets.NEXUS_ID }}",
+              "password": "${{ secrets.NEXUS_SECRET }}"
+            }]
 
       # Build Maven
       - name: C) Build Maven
