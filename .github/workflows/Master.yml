@@ -79,20 +79,20 @@ jobs:
 #          repoName="${repository##*/}"
 #          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
 
-    version:
-      needs: dev-deploy
-      runs-on: ubuntu-latest
-      steps:
-      # Increase POM file version
-      - name: A) Enumerate Maven Version
-        shell: bash
-        run: |
-          bash "${PWD}/automation/version-enumerate.sh"
+  version:
+    needs: dev-deploy
+    runs-on: ubuntu-latest
+    steps:
+    # Increase POM file version
+    - name: A) Enumerate Maven Version
+      shell: bash
+      run: |
+        bash "${PWD}/automation/version-enumerate.sh"
 
-      # Commit the increase in the pom file to the branch
-      # Github actions cannot recurse on trigger
-      - name: B) Commit Version Update
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Enumerate Maven Version
-          file_pattern: pom.xml
+    # Commit the increase in the pom file to the branch
+    # Github actions cannot recurse on trigger
+    - name: B) Commit Version Update
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Enumerate Maven Version
+        file_pattern: pom.xml
