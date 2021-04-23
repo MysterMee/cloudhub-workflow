@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="mule-pipeline-action-test-suite.xml" />
+	<munit:test name="mule-pipeline-action-test-suite-get:\template:mule-pipeline-action-configTest" doc:id="6507dd50-a812-40ad-bb32-e0ad902f8695" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\template:mule-pipeline-action-config" doc:id="e12d2792-f8d9-4b85-9085-08a62e9c0674" name="get:\template:mule-pipeline-action-config"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>
