@@ -1,4 +1,4 @@
-name: QA
+name: Dev
 
 # Deployment to low-level environment for triggering manually
 
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  qa-deploy:
+  dev-deploy:
     needs: dev-deploy
     environment: dev
     env:
