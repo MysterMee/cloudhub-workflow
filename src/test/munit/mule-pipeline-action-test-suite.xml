@@ -16,6 +16,4 @@
 			<flow-ref doc:name="Flow-ref to get:\template:mule-pipeline-action-config" doc:id="21910be6-ab4f-4ccf-b681-e8ce7698b553" name="get:\template:mule-pipeline-action-config"/>
 		</munit:execution>
 	</munit:test>
-
-
 </mule>
