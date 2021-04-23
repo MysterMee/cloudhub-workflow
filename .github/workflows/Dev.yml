@@ -32,9 +32,9 @@ jobs:
           clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
         run: bash "${PWD}/automation/github-runner.sh"
 
-#      - name: C.) Post-deployment API Tests
-#        shell: bash
-#        run: |
-#          sudo npm i -g newman@latest
-#          repoName="${repository##*/}"
-#          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
+      - name: C.) Post-deployment API Tests
+        shell: bash
+       run: |
+          sudo npm i -g newman@latest
+          repoName="${repository##*/}"
+          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
