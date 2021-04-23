@@ -54,7 +54,7 @@
             </configuration>
          </plugin>
          -->
-      </plugins>
+        </plugins>
    </build>
    <dependencies>
       <dependency>
@@ -97,7 +97,7 @@
          <scope>test</scope>
       </dependency>
       -->
-   </dependencies>
+    </dependencies>
    <distributionManagement>
       <repository>
         <id>github</id>
