@@ -57,6 +57,10 @@ jobs:
       repository: ${{ github.repository }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
       - name: A) Download Artifact
         uses: actions/download-artifact@v1
         with:
@@ -83,6 +87,10 @@ jobs:
     needs: dev-deploy
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+
     # Increase POM file version
     - name: A) Enumerate Maven Version
       shell: bash
