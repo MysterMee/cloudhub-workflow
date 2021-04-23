@@ -20,24 +20,23 @@ jobs:
         with:
           java-version: 1.8
 
+      # Cache Maven Dependencies
+      - name: A) Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
       # Populate Custom Settings File
-      - name: A) Build Settings File
+      - name: B) Build Settings File
         uses: whelk-io/maven-settings-xml-action@v14
         env:
           nexusId: ${{ secrets.NEXUS_ID }}
           nexusSecret: ${{ secrets.NEXUS_SECRET }}
         with:
           repositories: '[{"id": "MuleRepository", "url": "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/"}]'
-          plugin_repositories: '[{"id": "mule-public", "url": "https://repository.mulesoft.org/nexus/content/repositories/public"}]'
           servers: '[{"id": "MuleRepository","username": "${env.nexusId}","password": "${env.nexusSecret}"}]'
-
-      # Cache Maven Dependencies
-      - name: B) Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
 
       # Build Maven
       - name: C) Build Maven
