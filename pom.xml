@@ -78,6 +78,7 @@
          <layout>default</layout>
       </repository>
    </repositories>
+   
    <pluginRepositories>
       <pluginRepository>
          <id>mulesoft-releases</id>
