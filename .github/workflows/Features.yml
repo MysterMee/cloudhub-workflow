@@ -1,0 +1,37 @@
+name: Features
+
+# Feature branches will only run MUnit tests
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+  # Manual Trigger
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      # Cache Maven Dependencies
+      - name: A) Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      # Build Maven
+      - name: B) Build Maven
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+        run:  |
+          mvn -B package test "-DencryptionKey=${encryption}"

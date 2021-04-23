@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Download Anypoint CLI to the runner
 sudo npm i -g anypoint-cli@latest
 
@@ -11,11 +13,15 @@ rm credentials
 export ANYPOINT_PROFILE="${environment}"
 
 # Extract full jar name of the built artifact
-jarName=$(ls staging/*.jar
+jarName=$(ls staging/*.jar)
 
 # Run cloudhub-start.sh
 #   Starts up applications in cloudhub in UNDEPLOYED status before proceeding to the next steps.
-repoName="${repository##*/}-${environment}"
+if [[ "${environment}" == "prod" ]]; then
+  repoName="${repository##*/}"
+else
+  repoName="${repository##*/}-${environment}"
+fi
 set -- "${repoName}"
 bash "${PWD}/automation/cloudhub-start.sh" $@
 

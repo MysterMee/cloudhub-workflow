@@ -1,0 +1,40 @@
+name: QA
+
+# Deployment to mid-level environments should be triggered manually.
+
+on:
+  # Manual Trigger
+  workflow_dispatch:
+
+jobs:
+  qa-deploy:
+    needs: dev-deploy
+    environment: qa
+    env:
+      environment: qa
+      repository: ${{ github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: A) Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: artifact
+          path: staging
+
+      - name: B) Deploy to Cloudhub
+        shell: bash
+        env:
+          encryption: ${{ secrets.ENCRYPTION_KEY }}
+          credentials: ${{ secrets.ANYPOINT_CREDENTIALS_FILE }}
+          clientId: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
+          clientSecret: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+        run: bash "${PWD}/automation/github-runner.sh"
+
+#      - name: C.) Post-deployment API Tests
+#        shell: bash
+#        run: |
+#          sudo npm i -g newman@latest
+#          repoName="${repository##*/}"
+#          newman run "automation/tests/${repoName}.postman_collection.json" -e "automation/tests/${environment}.postman_environment.json"
