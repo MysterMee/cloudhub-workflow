@@ -30,11 +30,10 @@ jobs:
 
       # Populate Custom Settings File
       - name: B) Build Settings File
-        uses: DamianReeves/write-file-action@v1.0
+        uses: whelk-io/maven-settings-xml-action@v14
         with:
-          path: ~/.m2/settings.xml
-          contents: ${{ secrets.MAVEN_SETTINGS_FILE }}
-          write-mode: overwrite
+          repositories: '[{"id":"MuleRepository","url":"https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/"}]'
+          servers: '[{"id":"MuleRepository","username":"${{ secrets.NEXUS_ID }}","password":"${{ secrets.NEXUS_SECRET }}"}]'
 
       # Build Maven
       - name: C) Build Maven
