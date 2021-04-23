@@ -28,8 +28,15 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      # Populate Custom Settings File
+      - name: B) Build Settings File
+        uses: whelk-io/maven-settings-xml-action@v14
+        with:
+          repositories: '[{"id":"MuleRepository","url":"https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/"}]'
+          servers: '[{"id":"MuleRepository","username":"${{ secrets.NEXUS_ID }}","password":"${{ secrets.NEXUS_SECRET }}"}]'
+
       # Build Maven
-      - name: B) Build Maven
+      - name: C) Build Maven
         shell: bash
         env:
           encryption: ${{ secrets.ENCRYPTION_KEY }}
